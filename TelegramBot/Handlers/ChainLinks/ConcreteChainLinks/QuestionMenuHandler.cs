@@ -7,14 +7,14 @@ using TelegramBot.Handlers.ChainLinks.Models;
 
 namespace TelegramBot.Handlers.ChainLinks.ConcreteChainLinks;
 
-public class MessageTextStartHandler : AsyncChainLinkBase
+public class QuestionMenuHandler : AsyncChainLinkBase
 {
     public override async Task HandleAsync(Request request)
     {
         if (request.Update.Message?.Text is null) return;
 
-        if (request.Update.Message.Text.Equals(MessageTextConstants.StartCommandMessage, StringComparison.Ordinal)
-            || request.Update.Message.Text.Equals(MessageTextConstants.BackToMenuMessage, StringComparison.Ordinal))
+        if (request.Update.Message.Text.Equals(
+                MessageTextConstants.CheckKnowledgeMenuMessage, StringComparison.Ordinal))
         {
             request.Logger.LogInformation("Receive message text: {MessageText}", request.Update.Message.Text);
 
@@ -23,14 +23,14 @@ public class MessageTextStartHandler : AsyncChainLinkBase
                 {
                     new[]
                     {
-                        new KeyboardButton(MessageTextConstants.FactMenuMessage),
-                        new KeyboardButton(MessageTextConstants.CheckKnowledgeMenuMessage),
+                        new KeyboardButton(MessageTextConstants.BackToMenuMessage),
+                        new KeyboardButton(MessageTextConstants.QuizStartMessage),
                     },
                 }) { ResizeKeyboard = true, };
 
             await request.BotClient.SendTextMessageAsync(
                 request.Update.Message.Chat.Id,
-                DescriptionConstants.StartDescription,
+                DescriptionConstants.QuestionMenuDescription,
                 replyMarkup: replyKeyboard,
                 cancellationToken: request.Token).ConfigureAwait(false);
         }

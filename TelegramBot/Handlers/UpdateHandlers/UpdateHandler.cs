@@ -22,8 +22,9 @@ public class UpdateHandler : IUpdateHandler
     {
         Task handler = update switch
         {
-            { Message: not null } => new MessageTextStartHandler().Handle(new Request(botClient, update, _logger, cancellationToken)),
-            _ => throw new AggregateException(),
+            { Message: not null } => new MainMessageTextHandler().HandleAsync(
+                new Request(botClient, update, _logger, cancellationToken)),
+            _ => UnknownUpdateHandlerAsync(update),
         };
 
         await handler.ConfigureAwait(false);
@@ -44,5 +45,11 @@ public class UpdateHandler : IUpdateHandler
         // Cooldown in case of network connection error
         if (exception is RequestException)
             await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken).ConfigureAwait(false);
+    }
+
+    private Task UnknownUpdateHandlerAsync(Update update)
+    {
+        _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);
+        return Task.CompletedTask;
     }
 }
