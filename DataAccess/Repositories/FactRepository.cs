@@ -4,20 +4,20 @@ using Npgsql;
 
 namespace DataAccess.Repositories;
 
-public class QuestionRepository : IQuestionRepository
+public class FactRepository : IFactRepository
 {
     private readonly string _connectionString;
 
-    public QuestionRepository(string connectionString)
+    public FactRepository(string connectionString)
     {
         _connectionString = connectionString;
     }
 
-    public async Task<IList<Question?>> FindLimitQuestionsAsync(int limit)
+    public async Task<IList<Fact?>> FindLimitFactsAsync(int limit)
     {
         const string sqlRequest = """
-                                  SELECT DISTINCT QuestionId, text, answers
-                                  FROM questions
+                                  SELECT DISTINCT factid, facttext
+                                  FROM facts
                                   ORDER BY RANDOM()
                                   LIMIT @limit;
                                   """;
@@ -31,17 +31,16 @@ public class QuestionRepository : IQuestionRepository
         command.Parameters.AddWithValue("limit", limit);
 
         await using NpgsqlDataReader reader = await command.ExecuteReaderAsync();
-        var questions = new List<Question?>();
+        var facts = new List<Fact?>();
 
         while (await reader.ReadAsync().ConfigureAwait(false))
         {
-            int questionId = reader.GetInt32(0);
-            string questionText = reader.GetString(1);
-            string answers = reader.GetString(2);
+            int factId = reader.GetInt32(0);
+            string factText = reader.GetString(1);
 
-            questions.Add(new Question(questionId, questionText, answers));
+            facts.Add(new Fact(factId, factText));
         }
 
-        return questions;
+        return facts;
     }
 }
