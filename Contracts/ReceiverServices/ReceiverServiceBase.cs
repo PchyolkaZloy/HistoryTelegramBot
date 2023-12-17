@@ -25,7 +25,7 @@ public abstract class ReceiverServiceBase<TUpdateHandler> : IReceiverService
 
     public async Task ReceiveAsync(CancellationToken stoppingToken)
     {
-        var receiverOptions = new ReceiverOptions()
+        var receiverOptions = new ReceiverOptions
         {
             AllowedUpdates = Array.Empty<UpdateType>(),
             ThrowPendingUpdates = true,

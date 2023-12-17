@@ -3,24 +3,30 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
+using TelegramBot.Handlers.ChainLinks.ConcreteChainLinks;
+using TelegramBot.Handlers.ChainLinks.Models;
 
-namespace TelegramBot.UpdateHandlers;
+namespace TelegramBot.Handlers.UpdateHandlers;
 
 public class UpdateHandler : IUpdateHandler
 {
-    private readonly ITelegramBotClient _botClient;
     private readonly ILogger<UpdateHandler> _logger;
 
-    public UpdateHandler(ITelegramBotClient botClient, ILogger<UpdateHandler> logger)
+    public UpdateHandler(ILogger<UpdateHandler> logger)
     {
-        _botClient = botClient;
         _logger = logger;
     }
 
     public async Task HandleUpdateAsync(
         ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+        Task handler = update switch
+        {
+            { Message: not null } => new MessageTextStartHandler().Handle(new Request(botClient, update, _logger, cancellationToken)),
+            _ => throw new AggregateException(),
+        };
+
+        await handler.ConfigureAwait(false);
     }
 
     public async Task HandlePollingErrorAsync(

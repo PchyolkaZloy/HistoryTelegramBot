@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
-using TelegramBot.UpdateHandlers;
+using TelegramBot.Handlers.UpdateHandlers;
 
 namespace App.ReceiverServices;
 

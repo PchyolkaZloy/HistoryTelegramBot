@@ -1,12 +1,11 @@
 ﻿using App.Extensions;
 using App.PollingServices;
 using App.ReceiverServices;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
-using TelegramBot.UpdateHandlers;
+using TelegramBot.Handlers.UpdateHandlers;
 
 namespace HistoryTelegramBot;
 
@@ -14,11 +13,7 @@ public static class Program
 {
     public static async Task Main()
     {
-        IHost host = Host.CreateDefaultBuilder().ConfigureAppConfiguration((context, config) =>
-            {
-                config.SetBasePath(Directory.GetCurrentDirectory());
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-            })
+        IHost host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
                 services.Configure<BotConfiguration>(context.Configuration.GetSection(BotConfiguration.Configuration));
