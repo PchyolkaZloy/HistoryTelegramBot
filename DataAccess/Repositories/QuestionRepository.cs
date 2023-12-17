@@ -16,10 +16,10 @@ public class QuestionRepository : IQuestionRepository
     public async Task<IList<Question?>> FindQuestionBatchById(int firstQuestionId, int offset, int batchSize = 10)
     {
         const string sqlRequest = @"
-            SELECT question_id, question_text, answers
-            FROM your_table_name 
-            WHERE id = @firstQuestionId 
-            ORDER BY question_id 
+            SELECT QuestionId, text, answers
+            FROM questions 
+            WHERE QuestionId = @firstQuestionId 
+            ORDER BY QuestionId 
             LIMIT @batchSize OFFSET @offset";
 
         await using var connection = new NpgsqlConnection(_connectionString);
