@@ -1,11 +1,9 @@
 ﻿using App.Extensions;
-using App.PollingServices;
-using App.ReceiverServices;
+using DataAccess.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Telegram.Bot;
-using Telegram.Bot.Polling;
-using TelegramBot.Handlers.UpdateHandlers;
+using TelegramBot.Extensions;
 
 namespace HistoryTelegramBot;
 
@@ -16,7 +14,10 @@ public static class Program
         IHost host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
-                services.Configure<BotConfiguration>(context.Configuration.GetSection(BotConfiguration.Configuration));
+                services.Configure<BotConfiguration>(
+                    context.Configuration.GetSection(BotConfiguration.Configuration));
+                services.Configure<PostgresConfiguration>(
+                    context.Configuration.GetSection(PostgresConfiguration.Configuration));
 
                 services.AddHttpClient("telegram_bot_client")
                     .AddTypedClient<ITelegramBotClient>((httpClient, serviceProvider) =>
@@ -26,9 +27,13 @@ public static class Program
                         return new TelegramBotClient(options, httpClient);
                     });
 
-                services.AddScoped<IUpdateHandler, UpdateHandler>();
-                services.AddScoped<ReceiverService>();
-                services.AddHostedService<PollingService>();
+                ServiceProvider serviceProvider = services.BuildServiceProvider();
+
+                services
+                    .AddApplication()
+                    .AddInfrastructureDataAccess(
+                        serviceProvider.GetConfiguration<PostgresConfiguration>().ConnectionString)
+                    .AddPresentationTelegramBot();
             })
             .Build();
 
