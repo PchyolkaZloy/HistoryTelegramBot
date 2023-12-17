@@ -4,5 +4,5 @@ namespace Abstractions.Repositories;
 
 public interface IFactRepository
 {
-    Task<IList<Fact?>> FindLimitFactsAsync(int limit);
+    Task<Stack<Fact?>> FindLimitFactsAsync(int limit);
 }

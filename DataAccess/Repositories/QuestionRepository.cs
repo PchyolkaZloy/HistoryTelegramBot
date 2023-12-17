@@ -13,7 +13,7 @@ public class QuestionRepository : IQuestionRepository
         _connectionString = connectionString;
     }
 
-    public async Task<IList<Question?>> FindLimitQuestionsAsync(int limit)
+    public async Task<Stack<Question?>> FindLimitQuestionsAsync(int limit)
     {
         const string sqlRequest = """
                                   SELECT DISTINCT QuestionId, text, answers
@@ -31,7 +31,7 @@ public class QuestionRepository : IQuestionRepository
         command.Parameters.AddWithValue("limit", limit);
 
         await using NpgsqlDataReader reader = await command.ExecuteReaderAsync();
-        var questions = new List<Question?>();
+        var questions = new Stack<Question?>();
 
         while (await reader.ReadAsync().ConfigureAwait(false))
         {
@@ -39,7 +39,7 @@ public class QuestionRepository : IQuestionRepository
             string questionText = reader.GetString(1);
             string answers = reader.GetString(2);
 
-            questions.Add(new Question(questionId, questionText, answers));
+            questions.Push(new Question(questionId, questionText, answers));
         }
 
         return questions;

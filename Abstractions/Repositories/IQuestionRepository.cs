@@ -4,5 +4,5 @@ namespace Abstractions.Repositories;
 
 public interface IQuestionRepository
 {
-    Task<IList<Question?>> FindLimitQuestionsAsync(int limit);
+    Task<Stack<Question?>> FindLimitQuestionsAsync(int limit);
 }
