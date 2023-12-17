@@ -1,8 +1,8 @@
-CREATE TABLE Questions
+CREATE TABLE IF NOT EXISTS Questions
 (
     QuestionId SERIAL PRIMARY KEY,
-    Text       TEXT not null,
-    Answers    JSONB
+    Text       TEXT NOT NULL,
+    Answers    JSONB NOT NULL
 );
 
 INSERT INTO Questions (Text, Answers)
