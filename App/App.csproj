@@ -13,6 +13,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
       <ProjectReference Include="..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\TelegramBot\TelegramBot.csproj" />
     </ItemGroup>
 
