@@ -1,3 +1,3 @@
 ﻿namespace Models;
 
-public record Question(int Id, string Text, string Answers);
+public record Question(int Id, string Text, IList<string> Answers);

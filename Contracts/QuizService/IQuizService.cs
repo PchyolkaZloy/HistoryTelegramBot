@@ -5,7 +5,7 @@ namespace Contracts.QuizService;
 
 public interface IQuizService
 {
-    AnswerResult CheckAnswer(int questionId, UserAnswer userAnswer);
+    AnswerResult CheckAnswer(UserAnswer userAnswer);
 
-    Question GetQuestion();
+    Task<Question> GetQuestion();
 }

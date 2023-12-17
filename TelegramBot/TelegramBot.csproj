@@ -11,4 +11,8 @@
       <PackageReference Include="Telegram.Bot" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

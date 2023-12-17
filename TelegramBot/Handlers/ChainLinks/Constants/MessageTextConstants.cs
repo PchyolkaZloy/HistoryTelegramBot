@@ -11,4 +11,8 @@ public static class MessageTextConstants
     public static string BackToMenuMessage => "Вернуться в меню";
 
     public static string QuizStartMessage => "Начать тест";
+
+    public static string NextFactMessage => "Следующий факт";
+
+    public static string NextQuestionMessage => "Следующий вопрос";
 }

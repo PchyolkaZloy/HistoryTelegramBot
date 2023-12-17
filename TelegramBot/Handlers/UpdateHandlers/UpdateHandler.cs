@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Contracts.FactService;
+using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -11,10 +12,12 @@ namespace TelegramBot.Handlers.UpdateHandlers;
 public class UpdateHandler : IUpdateHandler
 {
     private readonly ILogger<UpdateHandler> _logger;
+    private readonly IFactService _factService;
 
-    public UpdateHandler(ILogger<UpdateHandler> logger)
+    public UpdateHandler(ILogger<UpdateHandler> logger, IFactService factService)
     {
         _logger = logger;
+        _factService = factService;
     }
 
     public async Task HandleUpdateAsync(
@@ -22,7 +25,7 @@ public class UpdateHandler : IUpdateHandler
     {
         Task handler = update switch
         {
-            { Message: not null } => new MainMessageTextHandler().HandleAsync(
+            { Message: not null } => new MainMessageTextHandler(_factService).HandleAsync(
                 new Request(botClient, update, _logger, cancellationToken)),
             _ => UnknownUpdateHandlerAsync(update),
         };

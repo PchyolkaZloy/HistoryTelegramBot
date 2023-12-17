@@ -1,5 +1,6 @@
 ﻿using Abstractions.Repositories;
 using Models;
+using Newtonsoft.Json.Linq;
 using Npgsql;
 
 namespace DataAccess.Repositories;
@@ -16,7 +17,7 @@ public class QuestionRepository : IQuestionRepository
     public async Task<Stack<Question?>> FindLimitQuestionsAsync(int limit)
     {
         const string sqlRequest = """
-                                  SELECT DISTINCT QuestionId, text, answers
+                                  SELECT QuestionId, text, answers
                                   FROM questions
                                   ORDER BY RANDOM()
                                   LIMIT @limit;
@@ -39,7 +40,10 @@ public class QuestionRepository : IQuestionRepository
             string questionText = reader.GetString(1);
             string answers = reader.GetString(2);
 
-            questions.Push(new Question(questionId, questionText, answers));
+            questions.Push(new Question(
+                questionId,
+                questionText,
+                JObject.Parse(answers).ToObject<List<string>>() ?? new List<string>()));
         }
 
         return questions;
