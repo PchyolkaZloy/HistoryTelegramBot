@@ -38,7 +38,7 @@ public class QuizCheckAnswerHandler : AsyncChainLinkBase
                     },
                 }) { ResizeKeyboard = true, };
 
-            AnswerResult result = _quizService.CheckAnswer(new UserAnswer(context.Update.Message.Text));
+            AnswerResult result = _quizService.CheckAnswer(new UserAnswer(context.Update.Message.Text.Trim()));
             var builder = new StringBuilder();
 
             if (result is AnswerResult.Correct)
@@ -48,10 +48,7 @@ public class QuizCheckAnswerHandler : AsyncChainLinkBase
             else
             {
                 builder.Append(AnswerTextMessage.IncorrectAnswerMessage);
-                foreach (string answer in await _quizService.GetAnswersToCurrentQuestion())
-                {
-                    builder.Append(answer).Append('\n');
-                }
+                builder.Append(_quizService.GetFirstAnswerToCurrentQuestion());
             }
 
             context.UpdateHandler.IsWaitAnswer = false;

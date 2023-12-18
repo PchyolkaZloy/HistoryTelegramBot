@@ -9,5 +9,5 @@ public interface IQuizService
 
     Task<Question> GetQuestion();
 
-    Task<List<string>> GetAnswersToCurrentQuestion();
+    string GetFirstAnswerToCurrentQuestion();
 }

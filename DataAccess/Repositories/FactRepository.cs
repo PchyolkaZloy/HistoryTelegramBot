@@ -16,7 +16,7 @@ public class FactRepository : IFactRepository
     public async Task<Stack<Fact?>> FindLimitFactsAsync(int limit)
     {
         const string sqlRequest = """
-                                  SELECT factid, facttext
+                                  SELECT fact_id, fact_text
                                   FROM facts
                                   ORDER BY RANDOM()
                                   LIMIT @limit;
