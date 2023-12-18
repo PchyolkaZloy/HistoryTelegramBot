@@ -17,7 +17,7 @@ public class QuestionRepository : IQuestionRepository
     public async Task<Stack<Question?>> FindLimitQuestionsAsync(int limit)
     {
         const string sqlRequest = """
-                                  SELECT QuestionId, text, answers
+                                  SELECT Question_Id, Question_text, answers
                                   FROM questions
                                   ORDER BY RANDOM()
                                   LIMIT @limit;
