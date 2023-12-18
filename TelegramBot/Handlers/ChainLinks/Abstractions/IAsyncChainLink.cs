@@ -6,5 +6,5 @@ public interface IAsyncChainLink
 {
     void AddNext(IAsyncChainLink link);
 
-    Task HandleAsync(Request request);
+    Task HandleAsync(UpdateHandlerContext context);
 }

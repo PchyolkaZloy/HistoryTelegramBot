@@ -8,4 +8,6 @@ public interface IQuizService
     AnswerResult CheckAnswer(UserAnswer userAnswer);
 
     Task<Question> GetQuestion();
+
+    Task<List<string>> GetAnswersToCurrentQuestion();
 }

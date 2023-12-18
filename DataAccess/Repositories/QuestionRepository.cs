@@ -1,6 +1,6 @@
 ﻿using Abstractions.Repositories;
 using Models;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using Npgsql;
 
 namespace DataAccess.Repositories;
@@ -40,10 +40,12 @@ public class QuestionRepository : IQuestionRepository
             string questionText = reader.GetString(1);
             string answers = reader.GetString(2);
 
+            var jsonObject = JsonConvert.DeserializeAnonymousType(answers, new { answers = new List<string>() });
+
             questions.Push(new Question(
                 questionId,
                 questionText,
-                JObject.Parse(answers).ToObject<List<string>>() ?? new List<string>()));
+                jsonObject?.answers ?? new List<string>()));
         }
 
         return questions;

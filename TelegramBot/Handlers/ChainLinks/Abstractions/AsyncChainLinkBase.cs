@@ -18,5 +18,5 @@ public abstract class AsyncChainLinkBase : IAsyncChainLink
         }
     }
 
-    public abstract Task HandleAsync(Request request);
+    public abstract Task HandleAsync(UpdateHandlerContext context);
 }

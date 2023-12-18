@@ -9,14 +9,15 @@ namespace TelegramBot.Handlers.ChainLinks.ConcreteChainLinks;
 
 public class QuestionMenuHandler : AsyncChainLinkBase
 {
-    public override async Task HandleAsync(Request request)
+    public override async Task HandleAsync(UpdateHandlerContext context)
     {
-        if (request.Update.Message?.Text is null) return;
+        if (context.Update.Message?.Text is null) return;
 
-        if (request.Update.Message.Text.Equals(
-                MessageTextConstants.CheckKnowledgeMenuMessage, StringComparison.Ordinal))
+        if (context.Update.Message.Text.Equals(
+                MessageTextConstants.CheckKnowledgeMenuMessage, StringComparison.Ordinal)
+            || context.Update.Message.Text.Equals(MessageTextConstants.QuizCommandMessage, StringComparison.Ordinal))
         {
-            request.Logger.LogInformation("Receive message text: {MessageText}", request.Update.Message.Text);
+            context.Logger.LogInformation("Receive message text: {MessageText}", context.Update.Message.Text);
 
             var replyKeyboard = new ReplyKeyboardMarkup(
                 new List<KeyboardButton[]>
@@ -28,15 +29,15 @@ public class QuestionMenuHandler : AsyncChainLinkBase
                     },
                 }) { ResizeKeyboard = true, };
 
-            await request.BotClient.SendTextMessageAsync(
-                request.Update.Message.Chat.Id,
+            await context.BotClient.SendTextMessageAsync(
+                context.Update.Message.Chat.Id,
                 DescriptionConstants.QuestionMenuDescription,
                 replyMarkup: replyKeyboard,
-                cancellationToken: request.Token).ConfigureAwait(false);
+                cancellationToken: context.Token).ConfigureAwait(false);
         }
         else
         {
-            NextHandler?.HandleAsync(request);
+            NextHandler?.HandleAsync(context);
         }
     }
 }

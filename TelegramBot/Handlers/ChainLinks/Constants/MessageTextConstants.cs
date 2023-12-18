@@ -6,6 +6,10 @@ public static class MessageTextConstants
 
     public static string StartCommandMessage => "/start";
 
+    public static string FactCommandMessage => "/fact";
+
+    public static string QuizCommandMessage => "/quiz";
+
     public static string CheckKnowledgeMenuMessage => "Проверить знания";
 
     public static string BackToMenuMessage => "Вернуться в меню";

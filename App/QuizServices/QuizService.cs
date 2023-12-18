@@ -42,4 +42,11 @@ public class QuizService : IQuizService
 
         return _currentQuestion ?? new Question(-1, "no questions in data base", new List<string>());
     }
+
+    public Task<List<string>> GetAnswersToCurrentQuestion()
+    {
+        return Task.FromResult(_currentQuestion is null
+            ? new List<string>()
+            : new List<string>(_currentQuestion.Answers));
+    }
 }
